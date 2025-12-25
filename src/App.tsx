@@ -1,8 +1,6 @@
-import React from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
 import Products from './pages/Products';
 import PerfumeDetails from './pages/PerfumeDetails';
 import Contact from './pages/Contact';

@@ -27,17 +27,15 @@ const Footer = () => {
 
   return (
     <footer className="footer">
-      {/* Column 1: Social */}
       <div className="footer-column">
         <h4>Social Media</h4>
         <ul>
-          <li><a href="#">Instagram</a></li>
-          <li><a href="#">Facebook</a></li>
-          <li><a href="#">TikTok</a></li>
+          <li><a href="https://instagram.com">Instagram</a></li>
+          <li><a href="https://instagram.com">Facebook</a></li>
+          <li><a href="https://instagram.com">TikTok</a></li>
         </ul>
       </div>
 
-      {/* Column 2: Legal */}
       <div className="footer-column">
         <h4>Legal</h4>
         <ul>
@@ -46,7 +44,6 @@ const Footer = () => {
         </ul>
       </div>
 
-      {/* Column 3: Navigation */}
       <div className="footer-column">
         <h4>Navigation</h4>
         <ul>
@@ -56,7 +53,6 @@ const Footer = () => {
         </ul>
       </div>
 
-      {/* Column 4: Newsletter */}
       <div className="footer-column">
         <h4>Newsletter</h4>
 

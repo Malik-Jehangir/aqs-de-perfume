@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import StoryTimeline from "../components/StoryTimeline";
 
@@ -55,21 +55,30 @@ const About = () => {
     img.src = slides[nextIndex].url;
   }, [active]);
 
-  const goToSlide = (index: number) => {
+const goToSlide = useCallback(
+  (index: number) => {
     if (index === active) return;
     setPrev(active);
     setActive(index);
     setIsAnimating(true);
     window.setTimeout(() => setIsAnimating(false), 650);
-  };
+  },
+  [active]
+);
 
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      goToSlide((active + 1) % slides.length);
-    }, 5000);
 
-    return () => window.clearInterval(timer);
-  }, [active]);
+useEffect(() => {
+  const timer = window.setInterval(() => {
+    const next = (active + 1) % slides.length;
+    setPrev(active);
+    setActive(next);
+    setIsAnimating(true);
+    window.setTimeout(() => setIsAnimating(false), 650);
+  }, 5000);
+
+  return () => window.clearInterval(timer);
+}, [active]);
+
 
   return (
     <main className="landing">
