@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/aqs-de-perfume/static/css/main.b8421710.css",
+    "main.js": "/aqs-de-perfume/static/js/main.60c40b54.js",
+    "index.html": "/aqs-de-perfume/index.html",
+    "main.b8421710.css.map": "/aqs-de-perfume/static/css/main.b8421710.css.map",
+    "main.60c40b54.js.map": "/aqs-de-perfume/static/js/main.60c40b54.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b8421710.css",
+    "static/js/main.60c40b54.js"
+  ]
+}
