@@ -39,8 +39,8 @@ const Footer = () => {
       <div className="footer-column">
         <h4>Legal</h4>
         <ul>
-          <li><a href="#">Data Protection</a></li>
-          <li><a href="#">Impressum</a></li>
+          <li><a href="https://instagram.com">Data Protection</a></li>
+          <li><a href="https://instagram.com">Impressum</a></li>
         </ul>
       </div>
 
