@@ -3,14 +3,15 @@ import { getAuth } from "firebase/auth";
 import { Firestore, getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBlJ3iqqndJuPCSafedzcSgeYYJTfy48C4",
-  authDomain: "aqs-de-parfum.firebaseapp.com",
-  projectId: "aqs-de-parfum",
-  storageBucket: "aqs-de-parfum.firebasestorage.app",
-  messagingSenderId: "804998137472",
-  appId: "1:804998137472:web:b2c0b90ade0bd46595c865",
-  measurementId: "G-6XKEJF5ZLH"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY!,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN!,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID!,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET!,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID!,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID!,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID!,
 };
+
 
 const app = initializeApp(firebaseConfig);
 
