@@ -40,7 +40,6 @@ html, body {
 }
 
 
-
 .hero-bleed,
 .video-bleed {
   position: relative;
@@ -49,6 +48,8 @@ html, body {
   transform: translateX(-50%);
   margin: 0;
 }
+
+
 
 
 
@@ -821,6 +822,9 @@ a {
        height: clamp(220px, 35vw, 340px);
   }
 
+    .hero-static .hero-image {
+    object-position: left center;
+  }
   .hero-overlay {
     background: linear-gradient(
       to top,
@@ -841,7 +845,6 @@ a {
 
     .hero-image {
     object-fit: cover;
-    object-position: center;
   }
 }
 
@@ -866,6 +869,14 @@ a {
   border-top: 1px solid rgba(0,0,0,0.06);
 }
 
+.hero-bleed,
+.video-bleed {
+  position: relative;
+  width: 100vw;
+  left: 46%;
+  transform: translateX(-50%);
+  margin: 0;
+}
 
   .hero-content {
     max-width: 100%;
