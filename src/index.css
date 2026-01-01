@@ -25,92 +25,57 @@ html, body {
   overflow-x: hidden;
 }
 
-/* HERO */
-.hero-bleed {
-  width: 100dvw;
-  margin-left: calc(50% - 50dvw);
-  margin-right: calc(50% - 50dvw);
-}
 
 .hero {
   position: relative;
   width: 100%;
-  height: min(85vh, 720px);
-  min-height: 520px;
   overflow: hidden;
-  background: #111;
-}
-
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: -20px;
-  background-image: var(--hero-bg);
-  background-size: cover;
-  background-position: center;
-  filter: blur(22px);
-  transform: scale(1.08);
-  opacity: 0.55;
 }
 
 .hero-media {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+
+.hero-bleed,
+.video-bleed {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+}
+
+
+
+.hero-static .hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero.hero-static {
+    height: clamp(1030px, 55vh, 720px);
+}
+
+
+.hero-overlay{
+  position: absolute;
+  inset: 0;
   z-index: 1;
 }
 
-.hero-image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  display: block;
-  transform: scale(1.02);
-  transition:
-    opacity 650ms ease,
-    transform 1200ms ease;
-  will-change: opacity, transform;}
-
-  .hero-image-prev {
-  opacity: 1;
-}
-
-.hero-image-current {
-  opacity: 0; 
-}
-
-.hero.is-animating .hero-image-prev {
-  opacity: 0;
-  transform: scale(1.00);
-}
-
-.hero.is-animating .hero-image-current {
-  opacity: 1;
-  transform: scale(1.03);
-}
-
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: linear-gradient(
-    90deg,
-    rgba(0,0,0,0.78) 0%,
-    rgba(0,0,0,0.35) 55%,
-    rgba(0,0,0,0.10) 100%
-  );
-}
-
-.hero-content {
+.hero-content{
   position: relative;
-  z-index: 3;
-  color: #fff;
-  padding: clamp(1.25rem, 4vw, 3rem);
-  max-width: 680px;
+  z-index: 2;
 }
+
+
 
 .hero-brand {
   letter-spacing: 0.25em;
@@ -847,9 +812,13 @@ a {
 }
 
 @media (max-width: 768px) {
-   .hero {
+    .hero:not(.hero-static) {
     height: clamp(380px, 70vh, 560px);
     min-height: 420px;
+  }
+
+  .hero.hero-static {
+       height: clamp(220px, 35vw, 340px);
   }
 
   .hero-overlay {
@@ -891,6 +860,12 @@ a {
       rgba(0,0,0,0.08) 100%
     );
   }
+
+  .video-bleed {
+  margin-top: 0;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
 
   .hero-content {
     max-width: 100%;
@@ -1708,6 +1683,59 @@ a {
   white-space: nowrap;
 }
 
+/* HERO (static banner) */
+.hero-static .hero-image {
+  object-fit: cover; /* Banner should fill nicely */
+}
+
+.video-wrap {
+  width: 100%;
+  background: #111;
+}
+
+.video-stage {
+  position: relative;
+  width: 100%;
+  height: clamp(1320px, 70vh, 720px);
+  overflow: hidden;
+}
+
+.video-player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* subtle fade on change */
+.video-stage.is-animating .video-player {
+  animation: videoFade 550ms ease;
+}
+
+@keyframes videoFade {
+  from { opacity: 0.2; transform: scale(1.01); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.video-controls {
+  display: flex;
+  justify-content: center;
+  padding: 0.8rem 1rem 1.2rem;
+  background: #111;
+}
+
+.video-dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Mobile tuning */
+@media (max-width: 768px) {
+  .video-stage {
+    height: clamp(260px, 55vh, 520px);
+  }
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .checkout-layout {
@@ -1839,6 +1867,8 @@ a {
   .hero {
     height: clamp(380px, 70vh, 560px);
   }
+
+  
 
   .hero-overlay {
     background: linear-gradient(
