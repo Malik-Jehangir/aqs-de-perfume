@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import StoryTimeline from "../components/StoryTimeline";
 import PerfumeCard from "../components/PerfumeCard";
 import type { Perfume } from "../types";
 import { collection, getDocs } from "firebase/firestore";
