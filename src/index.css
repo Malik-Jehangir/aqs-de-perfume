@@ -869,14 +869,14 @@ a {
   border-top: 1px solid rgba(0,0,0,0.06);
 }
 
-.hero-bleed,
-.video-bleed {
-  position: relative;
-  width: 100vw;
-  left: 46%;
-  transform: translateX(-50%);
-  margin: 0;
-}
+  .hero-bleed,
+  .video-bleed {
+    width: 100%;
+    left: 0;
+    transform: none;
+    margin: 0;
+  }
+
 
   .hero-content {
     max-width: 100%;
@@ -1746,6 +1746,118 @@ a {
   gap: 0.5rem;
 }
 
+/* =========================
+   ABOUT SHOWCASE (Luxury)
+   ========================= */
+.about-showcase {
+  padding: 3.2rem 0 1.5rem;
+  background: #faf7f5;
+}
+
+.about-showcase-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.showcase-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.showcase-kicker {
+  margin: 0 0 0.35rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: #666;
+}
+
+.showcase-title {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  letter-spacing: 0.01em;
+}
+
+.showcase-sub {
+  margin: 0;
+  color: #666;
+  line-height: 1.5;
+  max-width: 60ch;
+}
+
+.showcase-loading {
+  padding: 1rem 0;
+}
+
+.showcase-block {
+  margin-top: 1.8rem;
+}
+
+.showcase-rowhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.showcase-rowhead h3 {
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+/* Horizontal luxury rail */
+.showcase-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(240px, 1fr);
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 0.25rem 0.25rem 0.75rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 18px;
+}
+
+.showcase-item {
+  scroll-snap-align: start;
+}
+
+/* nicer scrolling */
+.showcase-rail::-webkit-scrollbar {
+  height: 10px;
+}
+.showcase-rail::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05);
+  border-radius: 999px;
+}
+.showcase-rail::-webkit-scrollbar-thumb {
+  background: rgba(184, 92, 92, 0.35);
+  border-radius: 999px;
+}
+
+/* All products grid inside showcase */
+.showcase-grid {
+  margin-top: 0.75rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .showcase-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .showcase-rail {
+    grid-auto-columns: minmax(220px, 80%);
+  }
+}
+
+
 /* Mobile tuning */
 @media (max-width: 768px) {
   .video-stage {
@@ -1939,4 +2051,102 @@ a {
     max-width: 100%;
     aspect-ratio: 1 / 1;  
 }
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .landing {
+    overflow-x: clip;   /* better than hidden */
+  }
+}
+
+
+@media (max-width: 768px) {
+  .hero-bleed,
+  .video-bleed {
+    width: 100% !important;
+    max-width: 100% !important;
+    left: 0 !important;
+    transform: none !important;
+    margin: 0 !important;
+  }
+  .showcase-rail {
+    display: flex !important;
+    gap: 1rem !important;
+
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory !important;
+    overscroll-behavior-x: contain;
+
+    padding: 0.25rem 1rem 0.75rem !important;
+    scroll-padding-left: 1rem;
+    scrollbar-width: none;
+  }
+
+  .showcase-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .showcase-item {
+    flex: 0 0 65% !important;
+    scroll-snap-align: start;
+  }
+
+  .perfume-card,
+  .perfume-card img {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .showcase-item {
+    flex-basis: 65% !important;
+  }
+}
+
+/* Safe default: no 100vw tricks */
+.hero-bleed,
+.video-bleed {
+  position: relative;
+  width: 100%;
+  margin: 0;
+}
+
+/* Desktop-only full bleed (safe method) */
+@media (min-width: 1024px) {
+  .hero-bleed,
+  .video-bleed {
+    width: 100vw;
+  }
+}
+
+/* Media should never exceed screen width */
+.hero-image,
+.video-player {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+}
+
+/* Extra safety: make sure wrappers can’t overflow */
+html,
+body,
+#root,
+.app,
+.content,
+.landing {
+  max-width: 100%;
+  overflow-x: hidden;
 }
