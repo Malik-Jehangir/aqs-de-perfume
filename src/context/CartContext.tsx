@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode,
-} from "react";
+import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import type { Perfume } from "../types";
 import { auth, db } from "../firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
@@ -29,18 +23,7 @@ const getCartDocId = () => {
   return user ? user.uid : "guest";
 };
 
-const saveCartToFirestore = async (items: CartItem[]) => {
-  const cartId = getCartDocId();
-  const cartRef = doc(db, "carts", cartId);
-
-  
-
-  const plainItems = items.map((item) => ({
-    perfume: item.perfume,
-    quantity: item.quantity,
-  }));
-
-  const removeUndefinedDeep = (value: any): any => {
+const removeUndefinedDeep = (value: any): any => {
   if (Array.isArray(value)) return value.map(removeUndefinedDeep);
   if (value && typeof value === "object") {
     const out: any = {};
@@ -53,7 +36,39 @@ const saveCartToFirestore = async (items: CartItem[]) => {
   return value;
 };
 
-await setDoc(cartRef, removeUndefinedDeep({ items: plainItems }), { merge: true });
+const normalizePerfume = (p: any): Perfume => ({
+  id: p?.id ?? "",
+  name: p?.name ?? "",
+  brand: p?.brand ?? "",
+  description: p?.description ?? "",
+  price: typeof p?.price === "number" ? p.price : 0,
+  imageUrl: p?.imageUrl ?? "",
+  notes: Array.isArray(p?.notes) ? p.notes : [],
+
+  tagline: p?.tagline ?? "",
+  quote: p?.quote ?? "",
+  stockText: p?.stockText ?? "In Stock",
+  currency: p?.currency ?? "BHD",
+  volume: p?.volume ?? "",
+  longevity: p?.longevity ?? "",
+  bestSeason: p?.bestSeason ?? "",
+  bestTime: p?.bestTime ?? "",
+  occasions: Array.isArray(p?.occasions) ? p.occasions : [],
+  perfectFor: Array.isArray(p?.perfectFor) ? p.perfectFor : [],
+});
+
+const saveCartToFirestore = async (items: CartItem[]) => {
+  const cartId = getCartDocId();
+  const cartRef = doc(db, "carts", cartId);
+
+  const plainItems = items.map((item) => ({
+    perfume: item.perfume,
+    quantity: item.quantity,
+  }));
+
+  await setDoc(cartRef, removeUndefinedDeep({ items: plainItems, updatedAt: Date.now() }), {
+    merge: true,
+  });
 };
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
@@ -69,8 +84,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         if (snapshot.exists()) {
           const data = snapshot.data() as { items?: any[] };
           const itemsFromDb: CartItem[] = (data.items || []).map((item) => ({
-            perfume: item.perfume,
-            quantity: item.quantity,
+            perfume: normalizePerfume(item.perfume),
+            quantity: typeof item.quantity === "number" ? item.quantity : 1,
           }));
           setItems(itemsFromDb);
         } else {
@@ -86,18 +101,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const addToCart = (perfume: Perfume) => {
+    const safe = normalizePerfume(perfume);
+
     setItems((prev) => {
-      const existing = prev.find((item) => item.perfume.id === perfume.id);
+      const existing = prev.find((item) => item.perfume.id === safe.id);
       let updated: CartItem[];
 
       if (existing) {
         updated = prev.map((item) =>
-          item.perfume.id === perfume.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
+          item.perfume.id === safe.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       } else {
-        updated = [...prev, { perfume, quantity: 1 }];
+        updated = [...prev, { perfume: safe, quantity: 1 }];
       }
 
       void saveCartToFirestore(updated);
@@ -116,9 +131,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <CartContext.Provider
-      value={{ items, addToCart, removeFromCart, totalItems }}
-    >
+    <CartContext.Provider value={{ items, addToCart, removeFromCart, totalItems }}>
       {children}
     </CartContext.Provider>
   );
@@ -126,8 +139,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
 export const useCart = (): CartContextValue => {
   const ctx = useContext(CartContext);
-  if (!ctx) {
-    throw new Error("useCart must be used within a CartProvider");
-  }
+  if (!ctx) throw new Error("useCart must be used within a CartProvider");
   return ctx;
 };

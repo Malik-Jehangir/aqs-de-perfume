@@ -301,7 +301,6 @@ const PerfumeDetails = () => {
                       type="button"
                       aria-label="Add to favorites"
                       onClick={() => {
-                        // TODO: hook this into favorites logic / firestore later
                         console.log("favorite:", perfume.id);
                       }}
                     >
