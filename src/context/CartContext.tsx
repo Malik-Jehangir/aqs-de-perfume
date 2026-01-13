@@ -33,12 +33,27 @@ const saveCartToFirestore = async (items: CartItem[]) => {
   const cartId = getCartDocId();
   const cartRef = doc(db, "carts", cartId);
 
+  
+
   const plainItems = items.map((item) => ({
     perfume: item.perfume,
     quantity: item.quantity,
   }));
 
-  await setDoc(cartRef, { items: plainItems });
+  const removeUndefinedDeep = (value: any): any => {
+  if (Array.isArray(value)) return value.map(removeUndefinedDeep);
+  if (value && typeof value === "object") {
+    const out: any = {};
+    for (const [k, v] of Object.entries(value)) {
+      if (v === undefined) continue;
+      out[k] = removeUndefinedDeep(v);
+    }
+    return out;
+  }
+  return value;
+};
+
+await setDoc(cartRef, removeUndefinedDeep({ items: plainItems }), { merge: true });
 };
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {

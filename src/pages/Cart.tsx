@@ -52,13 +52,13 @@ const Cart = () => {
                   </div>
 
                   <div className="cart-price">
-                    {(item.perfume.price * item.quantity).toFixed(2)} €
+                    {(item.perfume.price * item.quantity).toFixed(2)} BHD
                   </div>
                 </div>
 
                 <div className="cart-meta-bottom">
                   <div className="cart-line muted">
-                    Unit price: {item.perfume.price.toFixed(2)} €
+                    Unit price: {item.perfume.price.toFixed(2)} BHD
                   </div>
                   <div className="cart-line muted">
                     Quantity: <strong>{item.quantity}</strong>
@@ -82,7 +82,7 @@ const Cart = () => {
 
             <div className="summary-row">
               <span className="muted">Subtotal</span>
-              <span>{totalPrice.toFixed(2)} €</span>
+              <span>{totalPrice.toFixed(2)} BHD</span>
             </div>
 
             <div className="summary-row">
@@ -94,7 +94,7 @@ const Cart = () => {
 
             <div className="summary-row total">
               <span>Total</span>
-              <span>{totalPrice.toFixed(2)} €</span>
+              <span>{totalPrice.toFixed(2)} BHD</span>
             </div>
 
             <button className="primary summary-cta" onClick={() => navigate("/checkout")}>

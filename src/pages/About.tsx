@@ -61,17 +61,29 @@ const About = () => {
         const snapshot = await getDocs(colRef);
 
         const data: Perfume[] = snapshot.docs.map((doc) => {
-          const d = doc.data() as any;
-          return {
-            id: doc.id,
-            name: d.name,
-            brand: d.brand,
-            description: d.description,
-            price: d.price,
-            imageUrl: d.imageUrl,
-            notes: d.notes || [],
-          };
-        });
+        const d = doc.data() as Partial<Perfume>;
+
+        return {
+          id: doc.id,
+          name: d.name ?? "",
+          brand: d.brand ?? "",
+          description: d.description ?? "",
+          price: typeof d.price === "number" ? d.price : 0,
+          imageUrl: d.imageUrl ?? "",
+          notes: Array.isArray(d.notes) ? d.notes : [],
+          tagline: d.tagline ?? "",
+          quote: d.quote ?? "",
+          stockText: d.stockText ?? "In Stock",
+          currency: d.currency ?? "BHD",
+          volume: d.volume ?? "",
+          longevity: d.longevity ?? "",
+          bestSeason: d.bestSeason ?? "",
+          bestTime: d.bestTime ?? "",
+          occasions: Array.isArray(d.occasions) ? d.occasions : [],
+          perfectFor: Array.isArray(d.perfectFor) ? d.perfectFor : [],
+        };
+      });
+
 
         setPerfumes(data);
       } catch (e) {

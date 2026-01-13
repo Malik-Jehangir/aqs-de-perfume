@@ -11,7 +11,7 @@ const PerfumeCard = ({ perfume }: Props) => {
       <img src={perfume.imageUrl} alt={perfume.name} />
       <h3>{perfume.name}</h3>
       <p className="brand">{perfume.brand}</p>
-      <p className="price">{perfume.price.toFixed(2)} €</p>
+      <p className="price">{perfume.price.toFixed(2)} BHD</p>
       <Link to={`/products/${perfume.id}`} className="details-button">
         View details
       </Link>
