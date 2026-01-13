@@ -48,24 +48,26 @@ const PerfumeDetails = () => {
         const data: any = snapshot.data();
 
         setPerfume({
-          id: snapshot.id,
-          name: data.name,
-          brand: data.brand,
-          description: data.description,
-          price: Number(data.price ?? 0),
-          imageUrl: data.imageUrl,
-          notes: Array.isArray(data.notes) ? data.notes : [],
-          tagline: data.tagline,
-          quote: data.quote,
-          stockText: data.stockText,
-          currency: data.currency,
-          volume: data.volume,
-          longevity: data.longevity,
-          bestSeason: data.bestSeason,
-          bestTime: data.bestTime,
-          occasions: Array.isArray(data.occasions) ? data.occasions : [],
-          perfectFor: Array.isArray(data.perfectFor) ? data.perfectFor : [],
-        } as Perfume);
+              id: snapshot.id,
+              name: data.name ?? "",
+              brand: data.brand ?? "",
+              description: data.description ?? "",
+              price: typeof data.price === "number" ? data.price : Number(data.price ?? 0),
+              imageUrl: data.imageUrl ?? "",
+              notes: Array.isArray(data.notes) ? data.notes : [],
+
+              tagline: data.tagline ?? "",
+              quote: data.quote ?? "",
+              stockText: data.stockText ?? "In Stock",
+              currency: data.currency ?? "BHD",
+              volume: data.volume ?? "",
+              longevity: data.longevity ?? "",
+              bestSeason: data.bestSeason ?? "",
+              bestTime: data.bestTime ?? "",
+              occasions: Array.isArray(data.occasions) ? data.occasions : [],
+              perfectFor: Array.isArray(data.perfectFor) ? data.perfectFor : [],
+            });
+
       } catch (err) {
         console.error(err);
         setError("Failed to load perfume details.");
@@ -78,11 +80,13 @@ const PerfumeDetails = () => {
     loadPerfume();
   }, [id]);
 
-  const currencySymbol = (perfume as any)?.currency || "BHD";
-  const stockText = (perfume as any)?.stockText || "In Stock";
-  const tagline = (perfume as any)?.tagline || "";
-  const quote = (perfume as any)?.quote || "";
-  const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(false);
+
+    const currencySymbol = perfume?.currency || "BHD";
+    const stockText = perfume?.stockText || "In Stock";
+    const tagline = perfume?.tagline || "";
+    const quote = perfume?.quote || "";
+
 
 
   const notesParsed = useMemo(() => {
