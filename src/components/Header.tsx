@@ -92,10 +92,6 @@ const Header = () => {
             </div>
           )}
         </div>
-
-        <NavLink to="/products" className="nav-link" onClick={closeAllMenus}>
-          Our products
-        </NavLink>
         <NavLink to="/contact" className="nav-link" onClick={closeAllMenus}>
           Contact us
         </NavLink>

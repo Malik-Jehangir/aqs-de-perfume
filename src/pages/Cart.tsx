@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
 const Cart = () => {
-  const { items, removeFromCart } = useCart();
+  const { items, removeFromCart, increaseQty, decreaseQty } = useCart();
   const navigate = useNavigate();
 
   const totalPrice = items.reduce(
@@ -16,7 +16,10 @@ const Cart = () => {
         <div className="cart-header">
           <h1>Your Bag</h1>
           <p className="muted">
-            Your bag is empty. <Link to="/products" className="link">Explore products</Link>
+            Your bag is empty.{" "}
+            <Link to="/products" className="link">
+              Explore products
+            </Link>
           </p>
         </div>
       </main>
@@ -60,8 +63,36 @@ const Cart = () => {
                   <div className="cart-line muted">
                     Unit price: {item.perfume.price.toFixed(2)} BHD
                   </div>
-                  <div className="cart-line muted">
-                    Quantity: <strong>{item.quantity}</strong>
+
+                  {/* Quantity controls (same CSS classes as Checkout) */}
+                  <div className="cart-line">
+                    <span className="muted">Quantity:</span>{" "}
+                    <div className="qty-controls" aria-label="Quantity controls">
+                      <button
+                        type="button"
+                        className="qty-btn"
+                        onClick={() => decreaseQty(item.perfume.id)}
+                        disabled={item.quantity <= 1}
+                        aria-label={`Decrease quantity of ${item.perfume.name}`}
+                        title="Decrease"
+                      >
+                        −
+                      </button>
+
+                      <span className="qty-value" aria-live="polite">
+                        {item.quantity}
+                      </span>
+
+                      <button
+                        type="button"
+                        className="qty-btn"
+                        onClick={() => increaseQty(item.perfume.id)}
+                        aria-label={`Increase quantity of ${item.perfume.name}`}
+                        title="Increase"
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
 
                   <button
@@ -97,7 +128,10 @@ const Cart = () => {
               <span>{totalPrice.toFixed(2)} BHD</span>
             </div>
 
-            <button className="primary summary-cta" onClick={() => navigate("/checkout")}>
+            <button
+              className="primary summary-cta"
+              onClick={() => navigate("/checkout")}
+            >
               Proceed to checkout
             </button>
 

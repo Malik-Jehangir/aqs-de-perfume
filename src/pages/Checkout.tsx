@@ -1,3 +1,4 @@
+// Checkout.tsx
 import { useMemo, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
@@ -6,7 +7,7 @@ import { CreditCard, QrCode, Wallet, Apple, Chrome } from "lucide-react";
 type PayMethod = "benefitpay" | "paypal" | "applepay" | "googlepay";
 
 const Checkout = () => {
-  const { items } = useCart();
+  const { items, increaseQty, decreaseQty } = useCart();
   const navigate = useNavigate();
   const [method, setMethod] = useState<PayMethod>("paypal");
   const [loading, setLoading] = useState(false);
@@ -69,7 +70,9 @@ const Checkout = () => {
             <h1>Checkout</h1>
             <p className="muted">Your cart is empty.</p>
           </div>
-          <Link className="link" to="/products">Continue shopping</Link>
+          <Link className="link" to="/products">
+            Continue shopping
+          </Link>
         </div>
       </main>
     );
@@ -148,32 +151,24 @@ const Checkout = () => {
 
             <div className="pay-hint">
               <CreditCard size={16} />
-              <span>
-                Payments are processed securely. You’ll be redirected to complete payment.
-              </span>
+              <span>Payments are processed securely. You’ll be redirected to complete payment.</span>
             </div>
 
             {err && <div className="checkout-error">{err}</div>}
 
-            <button
-              className="primary checkout-cta"
-              disabled={loading}
-              onClick={startPayment}
-            >
+            <button className="primary checkout-cta" disabled={loading} onClick={startPayment}>
               {loading ? "Starting payment..." : `Pay ${total.toFixed(2)} BHD`}
             </button>
 
-            <p className="checkout-fine">
-              By placing this order, you agree to our terms and privacy policy.
-            </p>
+            <p className="checkout-fine">By placing this order, you agree to our terms and privacy policy.</p>
           </div>
 
           <div className="checkout-card subtle">
             <h3 className="checkout-card-title">Need help?</h3>
-            <p className="muted">
-              Contact us anytime. We reply fast and take care of you.
-            </p>
-            <Link className="link" to="/contact">Contact support</Link>
+            <p className="muted">Contact us anytime. We reply fast and take care of you.</p>
+            <Link className="link" to="/contact">
+              Contact support
+            </Link>
           </div>
         </div>
 
@@ -187,16 +182,40 @@ const Checkout = () => {
                   <div className="summary-thumb">
                     <img src={i.perfume.imageUrl} alt={i.perfume.name} loading="lazy" />
                   </div>
+
                   <div className="summary-info">
                     <div className="summary-name">{i.perfume.name}</div>
+
                     <div className="summary-meta">
                       <span className="muted">{i.perfume.brand}</span>
-                      <span className="muted">× {i.quantity}</span>
+
+                      <div className="qty-controls" aria-label="Quantity controls">
+                        <button
+                          type="button"
+                          className="qty-btn"
+                          onClick={() => decreaseQty(i.perfume.id)}
+                          aria-label={`Decrease ${i.perfume.name}`}
+                        >
+                          −
+                        </button>
+
+                        <span className="qty-value" aria-label={`Quantity ${i.quantity}`}>
+                          {i.quantity}
+                        </span>
+
+                        <button
+                          type="button"
+                          className="qty-btn"
+                          onClick={() => increaseQty(i.perfume.id)}
+                          aria-label={`Increase ${i.perfume.name}`}
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <div className="summary-price">
-                    {(i.perfume.price * i.quantity).toFixed(2)} BHD
-                  </div>
+
+                  <div className="summary-price">{(i.perfume.price * i.quantity).toFixed(2)} BHD</div>
                 </div>
               ))}
             </div>
@@ -219,7 +238,9 @@ const Checkout = () => {
               <span>{total.toFixed(2)} BHD</span>
             </div>
 
-            <Link className="link" to="/cart">Edit cart</Link>
+            <Link className="link" to="/cart">
+              Edit cart
+            </Link>
           </div>
         </aside>
       </section>

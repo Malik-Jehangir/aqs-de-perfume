@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
 import type { Perfume } from "../types";
 import { auth, db } from "../firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
@@ -13,6 +13,11 @@ type CartContextValue = {
   items: CartItem[];
   addToCart: (perfume: Perfume) => void;
   removeFromCart: (perfumeId: string) => void;
+
+  increaseQty: (perfumeId: string) => void;
+  decreaseQty: (perfumeId: string) => void;
+  setQty: (perfumeId: string, qty: number) => void;
+
   totalItems: number;
 };
 
@@ -128,10 +133,59 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  const increaseQty = (perfumeId: string) => {
+    setItems((prev) => {
+      const updated = prev.map((item) =>
+        item.perfume.id === perfumeId ? { ...item, quantity: item.quantity + 1 } : item
+      );
+      void saveCartToFirestore(updated);
+      return updated;
+    });
+  };
+
+  const decreaseQty = (perfumeId: string) => {
+    setItems((prev) => {
+      const updated = prev
+        .map((item) =>
+          item.perfume.id === perfumeId ? { ...item, quantity: item.quantity - 1 } : item
+        )
+        .filter((item) => item.quantity > 0);
+
+      void saveCartToFirestore(updated);
+      return updated;
+    });
+  };
+
+  const setQty = (perfumeId: string, qty: number) => {
+    const safeQty = Number.isFinite(qty) ? Math.max(0, Math.floor(qty)) : 0;
+
+    setItems((prev) => {
+      const updated =
+        safeQty === 0
+          ? prev.filter((item) => item.perfume.id !== perfumeId)
+          : prev.map((item) =>
+              item.perfume.id === perfumeId ? { ...item, quantity: safeQty } : item
+            );
+
+      void saveCartToFirestore(updated);
+      return updated;
+    });
+  };
+
+  const totalItems = useMemo(() => items.reduce((sum, item) => sum + item.quantity, 0), [items]);
 
   return (
-    <CartContext.Provider value={{ items, addToCart, removeFromCart, totalItems }}>
+    <CartContext.Provider
+      value={{
+        items,
+        addToCart,
+        removeFromCart,
+        increaseQty,
+        decreaseQty,
+        setQty,
+        totalItems,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

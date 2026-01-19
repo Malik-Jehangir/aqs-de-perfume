@@ -334,6 +334,14 @@ const PerfumeDetails = () => {
                 </ul>
               </section>
             ) : null}
+            <section className="pdp-promo" aria-label="New customer discount">
+                  <div className="pdp-promo-inner">
+                    <div className="pdp-promo-title">NEW CUSTOMER?</div>
+                    <div className="pdp-promo-text">
+                      5% off your first purchase! Use the code <span className="pdp-promo-code">'welcome'</span> at checkout
+                    </div>
+                  </div>
+                </section>
           </article>
         </section>
       </div>
