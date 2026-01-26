@@ -23,10 +23,26 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
 
+  const getOrCreateGuestId = () => {
+  const key = "aqs_guest_id";
+  const existing = localStorage.getItem(key);
+  if (existing) return existing;
+
+  const id =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `guest_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+
+  localStorage.setItem(key, id);
+  return id;
+};
+
+
 const getCartDocId = () => {
   const user = auth.currentUser;
-  return user ? user.uid : "guest";
+  return user ? `user_${user.uid}` : `guest_${getOrCreateGuestId()}`;
 };
+
 
 const removeUndefinedDeep = (value: any): any => {
   if (Array.isArray(value)) return value.map(removeUndefinedDeep);
@@ -82,7 +98,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       try {
-        const cartId = user ? user.uid : "guest";
+        const cartId = user ? `user_${user.uid}` : `guest_${getOrCreateGuestId()}`;
         const cartRef = doc(db, "carts", cartId);
         const snapshot = await getDoc(cartRef);
 
@@ -104,6 +120,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
     return () => unsubscribe();
   }, []);
+
 
   const addToCart = (perfume: Perfume) => {
     const safe = normalizePerfume(perfume);
